@@ -49,7 +49,7 @@ class BooksController{
             if(err){
                 res.end(err);
             }
-            book.delete((err)=>{
+            book.remove((err)=>{
                 if(err){
                     res.end(err);
                 }

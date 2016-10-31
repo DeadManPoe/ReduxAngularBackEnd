@@ -7,7 +7,7 @@ class UsersController{
     static post(req,res){
         userModel.findOne({
             email : email.req.body['email']
-        })
+        });
         let user = new userModel();
         for(let key in req.body){
             if(req.body.hasOwnProperty(key)){
@@ -28,7 +28,11 @@ class UsersController{
         let email = req.body.email;
         userModel.findOne({
             email : email
-        },'password',(err,user)=>{
+        },{
+            name : 1,
+            email : 1,
+            password : 1
+        },(err,user)=>{
             if(err){
                 res.end(err);
             }
@@ -41,7 +45,10 @@ class UsersController{
             let hash = crypto.createHash('sha256');
             hash.update(req.body.password);
             if(hash.digest('hex') === password){
-                let token = jwt.sign(user,config.secret,{
+                let token = jwt.sign({
+                    name : user.name,
+                    email : user.email
+                },config.secret,{
                     //24 hours
                     expiresIn : 1440
                 });
